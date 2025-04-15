@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Exam Sentry</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="logo">
+                <h1>Exam Sentry</h1>
+            </div>
+            <nav class="dashboard-nav">
+                <ul>
+                    <li><a href="/student/dashboard" class="active">Available Exams</a></li>
+                    <li><a href="/view-results">My Results</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span>{{ username }}</span>
+                <a href="/logout" class="btn btn-small">Logout</a>
+            </div>
+        </header>
+        
+        <main class="dashboard-content">
+            <div class="page-header">
+                <h2>Available Exams</h2>
+                <p>Click on an exam to start taking it</p>
+            </div>
+            
+            <div class="exam-list">
+                {% if exams %}
+                    {% for exam in exams %}
+                    <div class="exam-card">
+                        <div class="exam-info">
+                            <h3>{{ exam.title }}</h3>
+                            <p>{{ exam.description }}</p>
+                            <div class="exam-meta">
+                                <span>Duration: {{ exam.duration }} minutes</span>
+                                <span>Created by: {{ exam.created_by }}</span>
+                            </div>
+                        </div>
+                        <div class="exam-actions">
+                            <a href="/take-exam/{{ exam.exam_id }}" class="btn btn-primary">Take Exam</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                <div class="no-items">
+                    <p>No exams available at the moment.</p>
+                </div>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+</body>
+</html>

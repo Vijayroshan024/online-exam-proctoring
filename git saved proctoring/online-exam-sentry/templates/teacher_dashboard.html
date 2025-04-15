@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard - Exam Sentry</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="logo">
+                <h1>Exam Sentry</h1>
+            </div>
+            <nav class="dashboard-nav">
+                <ul>
+                    <li><a href="/teacher/dashboard" class="active">My Exams</a></li>
+                    <li><a href="/view-results">Results</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span>{{ username }}</span>
+                <a href="/logout" class="btn btn-small">Logout</a>
+            </div>
+        </header>
+        
+        <main class="dashboard-content">
+            <div class="page-header">
+                <h2>My Exams</h2>
+                <a href="/create-exam" class="btn btn-primary">Create New Exam</a>
+            </div>
+            
+            <div class="exam-list">
+                {% if exams %}
+                    {% for exam in exams %}
+                    <div class="exam-card">
+                        <div class="exam-info">
+                            <h3>{{ exam.title }}</h3>
+                            <p>{{ exam.description }}</p>
+                            <div class="exam-meta">
+                                <span>Duration: {{ exam.duration }} minutes</span>
+                            </div>
+                        </div>
+                        <div class="exam-actions">
+                            <button class="btn btn-secondary view-results" data-exam-id="{{ exam.exam_id }}">View Results</button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                <div class="no-items">
+                    <p>You haven't created any exams yet.</p>
+                    <a href="/create-exam" class="btn btn-primary">Create your first exam</a>
+                </div>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/teacher.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Results - Exam Sentry</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="logo">
+                <h1>Exam Sentry</h1>
+            </div>
+            <nav class="dashboard-nav">
+                <ul>
+                    {% if role == 'teacher' %}
+                    <li><a href="/teacher/dashboard">My Exams</a></li>
+                    <li><a href="/view-results" class="active">Results</a></li>
+                    {% else %}
+                    <li><a href="/student/dashboard">Available Exams</a></li>
+                    <li><a href="/view-results" class="active">My Results</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span>{{ username }}</span>
+                <a href="/logout" class="btn btn-small">Logout</a>
+            </div>
+        </header>
+        
+        <main class="dashboard-content">
+            <div class="page-header">
+                <h2>{% if role == 'teacher' %}All Exam Results{% else %}My Results{% endif %}</h2>
+            </div>
+            
+            <div class="results-table-container">
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Exam ID</th>
+                            {% if role == 'teacher' %}<th>Student</th>{% endif %}
+                            <th>Score</th>
+                            <th>Cheating Detected</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if results %}
+                            {% for result in results %}
+                            <tr>
+                                <td>{{ result.exam_id }}</td>
+                                {% if role == 'teacher' %}<td>{{ result.username }}</td>{% endif %}
+                                <td class="score">{{ result.score }}%</td>
+                                <td class="cheating-status {% if result.cheating_detected %}detected{% endif %}">
+                                    {{ 'Yes' if result.cheating_detected else 'No' }}
+                                </td>
+                                <td>{{ result.timestamp }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="{% if role == 'teacher' %}5{% else %}4{% endif %}" class="no-results">No results found</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

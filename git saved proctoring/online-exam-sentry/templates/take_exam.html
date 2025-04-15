@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taking Exam - Exam Sentry</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="exam-page">
+    <div class="exam-container">
+        <header class="exam-header">
+            <div class="exam-title">
+                <h1>{{ exam.title }}</h1>
+                <p>{{ exam.description }}</p>
+            </div>
+            <div class="exam-meta">
+                <div class="timer" id="examTimer">
+                    <span class="timer-label">Time Remaining:</span>
+                    <span class="timer-value">{{ exam.duration }}:00</span>
+                </div>
+                <div class="proctoring-status">
+                    <div class="status-indicator" id="proctoringStatus"></div>
+                    <span>Proctoring Active</span>
+                </div>
+            </div>
+        </header>
+        
+        <div class="webcam-container">
+            <video id="webcam" autoplay playsinline></video>
+            <div class="webcam-overlay" id="proctoringOverlay">
+                <div class="warning-icon hidden" id="warningIcon">⚠️</div>
+                <div class="warning-message hidden" id="warningMessage">Looking away detected!</div>
+            </div>
+        </div>
+        
+        <main class="exam-content">
+            <div id="questionsContainer">
+                <!-- Questions will be dynamically loaded here -->
+                <p>Loading questions...</p>
+            </div>
+            
+            <div class="exam-navigation">
+                <button class="btn btn-secondary" id="prevBtn">Previous</button>
+                <div class="question-indicators" id="questionIndicators">
+                    <!-- Question indicators will be added dynamically -->
+                </div>
+                <button class="btn btn-secondary" id="nextBtn">Next</button>
+            </div>
+            
+            <div class="exam-actions">
+                <button class="btn btn-primary" id="submitExam">Submit Exam</button>
+            </div>
+        </main>
+    </div>
+    
+    <div class="modal" id="confirmSubmitModal">
+        <div class="modal-content">
+            <h3>Submit Exam?</h3>
+            <p>Are you sure you want to submit your exam? This action cannot be undone.</p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="cancelSubmit">Cancel</button>
+                <button class="btn btn-primary" id="confirmSubmit">Yes, Submit</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="cheatingWarningModal">
+        <div class="modal-content warning">
+            <h3>Warning: Suspicious Activity Detected</h3>
+            <p id="cheatingWarningMessage">The proctoring system has detected suspicious activity. This will be reported.</p>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="acknowledgeWarning">Acknowledge</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Pass exam data to JavaScript -->
+    <script>
+        const examData = {
+            id: "{{ exam.exam_id }}",
+            title: "{{ exam.title }}",
+            duration: parseInt("{{ exam.duration }}"),
+            questions: JSON.parse('{{ exam.questions|safe }}')
+        };
+    </script>
+    <script src="{{ url_for('static', filename='js/exam.js') }}"></script>
+</body>
+</html>
